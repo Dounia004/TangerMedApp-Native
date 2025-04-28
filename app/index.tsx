@@ -1,19 +1,21 @@
-import { useRouter } from 'expo-router';
+import { useRouter, useRootNavigationState } from 'expo-router';
 import { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
 
-export default function IndexRedirect() {
+export default function IndexPage() {
   const router = useRouter();
+  const rootNavigationState = useRootNavigationState();
 
   useEffect(() => {
-    // Utilise setTimeout pour attendre que le layout soit prêt
-    const timeout = setTimeout(() => {
-      router.replace('/(auth)/login');
-    }, 0); // ou 100ms si tu veux être sûr
+    if (!rootNavigationState?.key) return; // wait until navigation is ready
 
-    return () => clearTimeout(timeout);
-  }, []);
+    router.replace('./splash');
+  }, [rootNavigationState]);
 
-  return <View />;
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <ActivityIndicator size="large" color="#8ca6db" />
+    </View>
+  );
 }
 
